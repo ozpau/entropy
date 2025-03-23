@@ -1,0 +1,82 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "entropy",
+    "section": "",
+    "text": "This file will become your README and also the index of your documentation.",
+    "crumbs": [
+      "entropy"
+    ]
+  },
+  {
+    "objectID": "index.html#developer-guide",
+    "href": "index.html#developer-guide",
+    "title": "entropy",
+    "section": "Developer Guide",
+    "text": "Developer Guide\nIf you are new to using nbdev here are some useful pointers to get you started.\n\nInstall entropy in Development mode\n# make sure entropy package is installed in development mode\n$ pip install -e .\n\n# make changes under nbs/ directory\n# ...\n\n# compile to have changes apply to entropy\n$ nbdev_prepare",
+    "crumbs": [
+      "entropy"
+    ]
+  },
+  {
+    "objectID": "index.html#usage",
+    "href": "index.html#usage",
+    "title": "entropy",
+    "section": "Usage",
+    "text": "Usage\n\nInstallation\nInstall latest from the GitHub repository:\n$ pip install git+https://github.com/ozpau/entropy.git\nor from conda\n$ conda install -c ozpau entropy\nor from pypi\n$ pip install entropy\n\n\nDocumentation\nDocumentation can be found hosted on this GitHub repository’s pages. Additionally you can find package manager specific guidelines on conda and pypi respectively.",
+    "crumbs": [
+      "entropy"
+    ]
+  },
+  {
+    "objectID": "index.html#how-to-use",
+    "href": "index.html#how-to-use",
+    "title": "entropy",
+    "section": "How to use",
+    "text": "How to use\nFill me in please! Don’t forget code examples:\n\n1+1\n\n2",
+    "crumbs": [
+      "entropy"
+    ]
+  },
+  {
+    "objectID": "core.html",
+    "href": "core.html",
+    "title": "core",
+    "section": "",
+    "text": "source\n\nfoo\n\n foo ()",
+    "crumbs": [
+      "core"
+    ]
+  },
+  {
+    "objectID": "vector.html",
+    "href": "vector.html",
+    "title": "Compression",
+    "section": "",
+    "text": "import torch\nimport matplotlib.pyplot as plt\nimport pandas as pd\nimport seaborn as sns\nimport numpy as np",
+    "crumbs": [
+      "Compression"
+    ]
+  },
+  {
+    "objectID": "vector.html#uniform",
+    "href": "vector.html#uniform",
+    "title": "Compression",
+    "section": "Uniform",
+    "text": "Uniform\nIn uniform case, I know nothing about the distribution of the event assignments, so I need enough bits to help me decide amoung 10 choices. That would be \\(\\log_2(10) = 3.4\\) bits. Note that 4 bits allows representing 16 choices, and 3 bits 8. So hence the value.\n\nnp.log(10)/np.log(2)\n\n3.3219280948873626\n\n\n\nn = 10\nprobs = torch.full((n,), 1/n)\nprobs\n\ntensor([0.1000, 0.1000, 0.1000, 0.1000, 0.1000, 0.1000, 0.1000, 0.1000, 0.1000,\n        0.1000])\n\n\n\ntorch.log(probs)\n\ntensor([-2.3026, -2.3026, -2.3026, -2.3026, -2.3026, -2.3026, -2.3026, -2.3026,\n        -2.3026, -2.3026])\n\n\n\n-torch.sum(probs*torch.log(probs))\n\ntensor(2.3026)\n\n\nPerplexity is 10, nice!\n\ntorch.exp(-torch.sum(probs*torch.log(probs)))\n\ntensor(10.0000)\n\n\nNow let’s try computing entropy in bits instead:\n\n-torch.sum(probs*torch.log(probs))/np.log(2)\n\ntensor(3.3219)\n\n\nAs you can see, we have recovered \\(\\log_2(10) = 3.4\\)\n\nnp.log(2)\n\n0.6931471805599453",
+    "crumbs": [
+      "Compression"
+    ]
+  },
+  {
+    "objectID": "vector.html#some-plots",
+    "href": "vector.html#some-plots",
+    "title": "Compression",
+    "section": "Some plots",
+    "text": "Some plots\n\nprobs = torch.softmax(torch.randn(10), 0)\n\n\nfig, ax = plt.subplots(1,1,figsize=(5,3))\nsns.barplot(probs, ax=ax).set(title=\"P(X)\")\n\n\n\n\n\n\n\n\n\nfig, ax = plt.subplots(1,1,figsize=(5,3))\nsns.barplot(-torch.log(probs), ax=ax).set(title=\"-log(P(X))\")\n\n\n\n\n\n\n\n\n\nfig, (ax1, ax2) = plt.subplots(1,2,figsize=(10,3))\nsns.barplot(probs, ax=ax1).set(title=\"P(X)\")\nsns.barplot(-probs*torch.log(probs), ax=ax2).set(title=\"-P(X)log(P(X))\")\n\n\n\n\n\n\n\n\n\nimport random\nimport zlib\n\n\ns = ''.join(random.choices(['R', 'S'], [0.01, 0.99], k=1000))\ns\n\n'SSSSSSSSSSSSSSSSSSSSSSSSSSSSRSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSRSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSRSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSRSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSRSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSRSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSRSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSRSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSRSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSRSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSRSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS'\n\n\n\nlen(zlib.compress(s.encode()))\n\n40\n\n\n\ndef compress_for(p, k=1000000):\n    s = ''.join(random.choices(['R', 'S'], [p, 1-p], k=k))\n    return len(zlib.compress(s.encode()))/k\n\n\nps = np.linspace(0,1,100)\n\n\nnp.zeros(10)\n\narray([0., 0., 0., 0., 0., 0., 0., 0., 0., 0.])\n\n\n\ncompression_trials = []\nfor trial in range(2):\n    print(trial)\n    compressions = []\n    for p in ps:\n        c = compress_for(p)\n        compressions.append(c)\n    compression_trials.append(compressions)\n\n0\n1\n\n\n\ncompression_ratio = np.average(np.array(compression_trials), 0)\n\n\nplt.plot(ps,compression_ratio)\n\n\n\n\n\n\n\n\n\n# inner p\nip = ps[1:-1]\n\n\nentropy = - (ip*np.log(ip) + (1-ip)*np.log(1-ip))\n\n\nplt.plot(ip,entropy)\n\n\n\n\n\n\n\n\n\nplt.plot(entropy, compression_ratio[1:-1])\nplt.xlabel(\"Entropy\")\nplt.ylabel(\"Compression ratio\")\n\nText(0, 0.5, 'Compression ratio')",
+    "crumbs": [
+      "Compression"
+    ]
+  }
+]
