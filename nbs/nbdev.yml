@@ -1,0 +1,9 @@
+project:
+  output-dir: _docs
+
+website:
+  title: "entropy"
+  site-url: "https://ozpau.github.io/entropy"
+  description: "Playing with entropy"
+  repo-branch: main
+  repo-url: "https://github.com/ozpau/entropy"
